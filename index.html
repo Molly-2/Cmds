@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website with cmds, About, Stories, and Space News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .hamburger {
+            font-size: 30px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        .link-container {
+            margin-bottom: 20px;
+        }
+
+        button {
+            margin-left: 10px;
+            padding: 5px;
+        }
+
+        p {
+            cursor: pointer;
+            color: black;
+            font-size: 18px;
+        }
+
+        #searchInput, #spaceSearchInput {
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .story {
+            margin-top: 20px;
+        }
+
+        .story img {
+            max-width: 100%;
+            height: auto;
+        }
+         .img {
+            max-width: 100%;
+         }
+
+        .story p {
+            margin-top: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: skyblue;
+        }
+
+        @keyframes colorTingling {    
+              0% { color: red; }
+              2% { color: orange; }
+              4% { color: yellow; }
+              6% { color: green; }
+              8% { color: blue; }
+              10% { color: purple; }
+              12% { color: pink; }
+              14% { color: violet; }
+              16% { color: lime; }
+              18% { color: magenta; }
+              20% { color: skyblue; }
+              22% { color: coral; }
+              24% { color: teal; }
+              26% { color: goldenrod; }
+              28% { color: indigo; }
+             30% { color: salmon; }
+              32% { color: crimson; }
+             34% { color: navy; }
+             36% { color: darkgreen; }
+             38% { color: lavender; }
+              40% { color: sienna; }
+             42% { color: chartreuse; }
+             44% { color: turquoise; }
+              46% { color: aquamarine; }
+              48% { color: hotpink; }
+              50% { color: deeppink; }
+              52% { color: lightskyblue; }
+              54% { color: olive; }
+              56% { color: peachpuff; }
+              58% { color: seagreen; }
+              60% { color: beige; }
+             62% { color: tomato; }
+             64% { color: brown; }
+            66% { color: cyan; }
+              68% { color: darkorange; }
+             70% { color: palevioletred; }
+             72% { color: darkorchid; }
+            74% { color: khaki; }
+    76% { color: firebrick; }
+    78% { color: lightgreen; }
+    80% { color: slateblue; }
+    82% { color: dodgerblue; }
+    84% { color: gold; }
+    86% { color: thistle; }
+    88% { color: darkred; }
+    90% { color: mediumspringgreen; }
+    92% { color: lightcoral; }
+    94% { color: midnightblue; }
+    96% { color: powderblue; }
+    98% { color: darkslategray; }
+             100% { color: coral; }
+        }
+
+        .link-container p {
+            animation: colorTingling 20s infinite;
+            transition: color 0.5s;
+        }
+    </style>
+    <script>
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+
+        function copyToClipboard(link) {
+            var tempInput = document.createElement("input");
+            tempInput.style.position = "absolute";
+            tempInput.style.left = "-9999px";
+            tempInput.value = link;
+
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            alert("Copied the link: " + link);
+        }
+
+        function searchLinks() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            var links = document.getElementsByClassName("link-container");
+
+            for (var i = 0; i < links.length; i++) {
+                var linkText = links[i].getElementsByTagName("p")[0].innerText.toLowerCase();
+                if (linkText.includes(input)) {
+                    links[i].style.display = "block";
+                } else {
+                    links[i].style.display = "none";
+                }
+            }
+        }
+
+        function searchSpaceNews() {
+            var input = document.getElementById("spaceSearchInput").value.toLowerCase();
+            var stories = document.getElementsByClassName("story");
+
+            for (var i = 0; i < stories.length; i++) {
+                var storyText = stories[i].getElementsByTagName("p")[0].innerText.toLowerCase();
+                if (storyText.includes(input)) {
+                    stories[i].style.display = "block";
+                } else {
+                    stories[i].style.display = "none";
+                }
+            }
+        }
+
+        function showSection(sectionId) {
+            var sections = document.getElementsByClassName('section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].style.display = 'none';
+            }
+            document.getElementById(sectionId).style.display = 'block';
+            closeNav();
+        }
+
+        window.onload = function () {
+            showSection('home'); // Show home by default on page load
+        }
+    </script>
+</head>
+<body>
+
+    <div class="hamburger" onclick="openNav()">&#9776;</div>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="javascript:void(0)" onclick="showSection('home')">Home</a>
+        <a href="javascript:void(0)" onclick="showSection('about')">About</a>
+        <a href="javascript:void(0)" onclick="showSection('stories')">Stories</a>
+        <a href="javascript:void(0)" onclick="showSection('space')">Space News</a>
+        <a href="javascript:void(0)" onclick="showSection('images')">18+ images</a>
+    </div>
+
+    <div id="main">
+        <!-- Home Section (Copyable Links) -->
+        <div id="home" class="section">
+            <h2>Home</h2>
+            <input type="text" id="searchInput" onkeyup="searchLinks()" placeholder="Search for a link...">
+            <h6>CLICK ON THE NAME OF COMMANDS TO COPY</h6>
+            <div class="link-container">
+                <p onclick="copyToClipboard('-cmd install place.js https://example.com')">Llama Command</p>
+                <ul>
+                    <li>This command allows you to place a bet.</li>
+                </ul>
+            </div>
+
+            <div class="link-container">
+                <p onclick="copyToClipboard('-Cmd install pexels.js https://pastebin.com/raw/L2c9yPY2')">Pexels.js</p>
+            </div>
+          <ul>
+            <li>pexels you can use this command to search images get pexels images</li>
+          </ul>
+             <div class="link-container">
+                <p onclick="copyToClipboard('-Cmd install gamble.js https://pastebin.com/raw/8mPxwVD7')">Gamble.js</p>
+            </div>
+          <ul>
+            <li>Gamble this is a game command just for fun</li>
+          </ul>
+             <div class="link-container">
+                <p onclick="copyToClipboard('-Cmd install sendmoney.js https://pastebin.com/raw/0Vx39eqd')">Sendmoney.js</p>
+            </div>
+          <ul>
+            <li>this cmd you can use to send money to another user by using uid you can easy tranfer the money</li>
+          </ul>
+             <div class="link-container">
+                <p onclick="copyToClipboard('-cmd install gemini.js https://paste.c-net.org/WalkingSketchy')">Gemini.js</p>
+            </div>
+          <ul>
+            <li>This is google gemini ai</li>
+          </ul>
+          
+             <div class="link-container">
+                <p onclick="copyToClipboard('-cmd instal girl.js https://paste.c-net.org/RitualsBusboy')">Girl.js</p>
+                  <img src="https://images.unsplash.com/profile-1502565518071-0757cd74b5a5?ixlib=rb-4.0.3&crop=faces&fit=crop&w=64&h=64">
+             </div>
+            <ul>
+                <li>This commad sends random girl photo</li>
+            </ul>
+          
+             <div class="link-container">
+                <p onclick="copyToClipboard('-cmd install animal.js https://paste.c-net.org/FlickBoyle')">Animal.js</p>
+            </div>
+            <ul>
+                <li>This command shows animal infomation either it is domestic or Wild animal it shows where it is located and lifespan speed of animal etc.</li>
+            </ul>
+          
+             <div class="link-container">
+                <p onclick="copyToClipboard('-cmd instal history.js https://paste.c-net.org/ShrewMadonna')">History.js</p>
+            </div>
+            <ul>
+                <li>Fetches historical events based on a given date or keyword from the historical events.</li>
+            </ul>
+          
+             <div class="link-container">
+                <p onclick="copyToClipboard(' -Cmd install listallcmd.js https://pastebin.com/raw/pCcM4GNJ')">Listallcmd</p>
+            </div>
+          <p>You can use this cmd to view list off all available commads</p>
+             <div class="link-container">
+                <p onclick="copyToClipboard('-cmd install lyrics.js https://paste.c-net.org/BaronessRupert')">lyrics.js</p>
+            </div>
+          <ul>
+            <li>This is lyrics cmd it feaches song lyrics</li>
+          </ul>
+             <div class="link-container">
+                <p onclick="copyToClipboard('-cmd install rhyme.js https://paste.c-net.org/MonumentExtinct')">rhyme</p>
+            </div>
+            <ul>
+                <li>Use use this cmd to get rhyming words !example rhyme apple.</li>
+            </ul>
+          
+             <div class="link-container">
+                <p onclick="copyToClipboard('-cmd install password.js https://paste.c-net.org/SnuckSwear')">Password.js</p>
+            </div>
+            <ul>
+                <li>this cmd is for generating password you can generate password very fast and add anywhere you want to add just help to make it easy.</li>
+            </ul>
+          
+             <div class="link-container">
+                <p onclick="copyToClipboard('-cmd install maria.js https://paste.c-net.org/ManrayForever')">maria.js</p>
+            </div>
+            <ul>
+                <li>I creted this ai just for fun not too useful</li>
+            </ul>
+
+            <div class="link-container">
+                <p onclick="copyToClipboard('https://example.com')">Alice Smith's Profile</p>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div id="about" class="section hidden-section">
+            <h2>About</h2>
+            <p>This website allows you to easily search for and copy the command links. It also provides a section for sharing images and stories.</p>
+        </div>
+
+        <!-- Stories Section -->
+        <div id="stories" class="section hidden-section">
+            <h2>Summary</h2>
+            <div class="story">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Pierre_Schneiter_en_1958_%2853_ans%29.jpg/320px-Pierre_Schneiter_en_1958_%2853_ans%29.jpg" alt="Story 1 Image">
+                <p>Title: Pierre Schneiter - François Charles Pierre Schneiter was a French politician.</p>
+            </div>
+
+            <div class="story">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Datsun_Sports_DC3_001.JPG/320px-Datsun_Sports_DC3_001.JPG" alt="Story 2 Image">
+                <p>Title: Datsun DC-3 - The Datsun DC-3 was a lightweight automobile produced by Nissan and sold under the Datsun brand in 1952.</p>
+            </div>
+          
+          
+            <div class="story">
+                <img src="" alt="Story 2 Image">
+                <p>Adolf Hitler[a] (20 April 1889 – 30 April 1945) was an Austrian-born German politician who was the dictator of Nazi Germany from 1933 until his suicide in 1945. He rose to power as the leader of the Nazi Party,[c] becoming the chancellor in 1933 and then taking the title of Führer und Reichskanzler in 1934.[d] His invasion of Poland on 1 September 1939 marks the start of the Second World War. He was closely involved in military operations throughout the war and was central to the perpetration of the Holocaust: the genocide of about six million Jews and millions of other victims..</p>
+            </div>
+
+            <div class="story">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Kimba_Wood_on_the_Final_Pretrial_Conference_and_the_Civil_Trial.jpg/320px-Kimba_Wood_on_the_Final_Pretrial_Conference_and_the_Civil_Trial.jpg" alt="Story 3 Image">
+                <p>Title: Kimba Wood - Kimba Maureen Wood is a senior United States district judge.</p>
+            </div>
+        </div>
+
+        <!-- Space News Section -->
+        <div id="space" class="section hidden-section">
+            <h2>Space News</h2>
+            <input type="text" id="spaceSearchInput" onkeyup="searchSpaceNews()" placeholder="Search for space news...">
+          <div class="story">
+                <img src="https://apod.nasa.gov/apod/image/2409/M13IFN_2048.jpg" alt="Space News 1">
+                <p>2024-09-26","explanation":"In 1716, English astronomer Edmond Halley noted, \"This is but a little Patch, but it shows itself to the naked Eye, when the Sky is serene and the Moon absent.\" Of course, M13 is now less modestly recognized as the Great Globular Cluster in Hercules, one of the brightest globular star clusters in the northern sky. Sharp telescopic views like this one reveal the spectacular cluster's hundreds of thousands of stars. At a distance of 25,000 light-years, the cluster stars crowd into a region 150 light-years in diameter. Approaching the cluster core, upwards of 100 stars could be contained in a cube just 3 light-years on a side. For comparison, the closest star to the Sun is over 4 light-years away. The deep, wide-field image also reveals distant background galaxies including NGC 6207 at the upper left, and faint, foreground Milky Way dust clouds known to some as integrated flux nebulae.</p>
+            </div>
+          
+           <div class="story">
+                <img src="https://example.com/space-news1.jpg" alt="Space News 1">
+                <p>NASA announces a new mission to Mars, with plans to land a human crew by 2030. The mission will explore the potential for human life on the Red Planet.</p>
+            </div>
+          
+           <div class="story">
+                <img src="https://example.com/space-news1.jpg" alt="Space News 1">
+                <p>NASA announces a new mission to Mars, with plans to land a human crew by 2030. The mission will explore the potential for human life on the Red Planet.</p>
+            </div>
+           
+          <div id="images" class="section hidden-section">
+            <h5>18+images</h5>
+          <div class="images">
+                <img src="https://example.com/space-news2.jpg" alt="images 2">
+                <p>Astronomers have discovered a new exoplanet that could potentially support life, located 100 light-years away in a neighboring galaxy.</p>
+            </div>
+          
+           <div class="story">
+                <img src="https://example.com/space-news1.jpg" alt="Space News 1">
+                <p>NASA announces a new mission to Mars, with plans to land a human crew by 2030. The mission will explore the potential for human life on the Red Planet.</p>
+            </div>
+
+            <div class="story">
+                <img src="https://example.com/space-news2.jpg" alt="Space News 2">
+                <p>Astronomers have discovered a new exoplanet that could potentially support life, located 100 light-years away in a neighboring galaxy.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
